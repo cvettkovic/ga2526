@@ -1,0 +1,74 @@
+animation_frames 500 100
+
+ang_picture 0 0 140 100
+ang_unit 1
+ang_conicprecision 2800
+
+number a 25
+number b 15
+number x0 100
+number y0 60
+
+expression a1 {b*b}
+expression b1 {0}
+expression c {a*a}
+expression d {-b*b*x0}
+expression e {-a*a*y0}
+expression f {b*b*x0*x0+a*a*y0*y0-a*a*b*b}
+ang_conic conic a1 b1 c d e f
+ang_drawconic conic
+
+linethickness -3
+point T 50 45 90 60
+cmark_t T
+
+ang_getx curr_x T
+
+point M 80 65 120 65
+point N 80 50 120 50
+line m T M
+line n T N
+
+color 212 212 212
+linethickness -1
+drawline m
+drawline n
+
+ang_intersec2 A B conic m
+ang_intersec2 C D conic n
+
+color 0 0 0
+cmark A
+cmark B
+cmark C
+cmark D
+
+line p1 A C
+line p2 B D
+line q1 A D
+line q2 B C
+
+color 184 4 4
+drawline p1
+drawline p2
+drawline q1
+drawline q2
+
+intersec P p1 p2
+intersec Q q1 q2
+
+color 0 0 0
+cmark P
+cmark Q
+
+line t0 P Q
+
+linethickness -3
+drawline t0
+
+point l1 1 99
+point l2 2 99
+line l l1 l2
+
+intersec t l t0
+mark_lb t
