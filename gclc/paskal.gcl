@@ -4,6 +4,8 @@ ang_picture 0 0 140 100
 ang_unit 1
 ang_conicprecision 2800
 
+% draw conic
+
 number a 40
 number b 30
 number x0 70
@@ -17,6 +19,8 @@ expression e {-a*a*y0}
 expression f {b*b*x0*x0+a*a*y0*y0-a*a*b*b}
 ang_conic conic a1 b1 c d e f
 ang_drawconic conic
+
+% pascal theorem
 
 point T2b2c1 55 90 25 40
 point T1b2c1 100 25
@@ -72,5 +76,31 @@ cmark_t M
 
 line mid K L
 drawline mid
+
+% chasles theorem
+
+number ANGLE_INCREASE 2
+
+point C x0 y0
+point G 90 50 70 60
+number i 0
+
+color 62 92 75
+
+while { i<360 }
+{
+rotate Grot C i G
+
+line g C Grot
+ang_intersec2 A B g conic
+
+ang_tangent atan A conic
+ang_tangent btan B conic
+drawline atan
+drawline btan
+
+expression i {i+ANGLE_INCREASE}
+}
+
 
 
