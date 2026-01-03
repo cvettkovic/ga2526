@@ -1,10 +1,9 @@
 ## GCLC
 
-Dokumenti u ovom folderu su navedeni i objašnjeni ispod.
+Dokument od značaja u ovom folderu je `pascal_chasles.gcl`. U njemu se istovremeno demonstriraju dve teoreme projektivne geometrije u Paskalovoj ravni.
 
-- `polatiret.gcl`: Animacija odnosa pol-polara (tzv. *polaritet*) u odnosu na koniku. Tačka **T** (*pol*) se kreće i kreira pravu **t** (*polaru*).
-- `paskal.gcl`: Animacija delovanja *Paskalove teoreme* koja tvrdi kolinearnost secišta naspamnih stranica šestotemenika upisanog u nedegenerisanu koniku. Animacija se završava specijalnim slučajem (kada se dva temena poklapaju, tj. umesto šestotemenika imamo petotemenik).
-- `dualna_konika.gcl`: Animacija "izgleda" dualne konike koja se dobija kao skup svih pravih tangentnih na datu nedegenerisanu koniku, što je rezultat *Šalove teoreme*.
+1. *Paskalova teorema.* Animacija delovanja teoreme koja tvrdi kolinearnost secišta naspamnih stranica šestotemenika upisanog u nedegenerisanu koniku. Animacija se završava specijalnim slučajem (kada se dva temena poklapaju, tj. umesto šestotemenika imamo petotemenik).
+2. *Šalova teorema.* Animacija "izgleda" dualne konike koja se dobija kao skup svih pravih tangentnih na datu nedegenerisanu koniku.
 
 ### Napomena
 
