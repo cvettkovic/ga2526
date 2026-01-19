@@ -1,0 +1,123 @@
+\documentclass[a4paper,12pt]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[serbian]{babel}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage{parskip}
+
+\setlength{\parskip}{6pt}
+\setlength{\parindent}{18pt}
+
+\title{Aproksimacija najdužeg razapinjućeg stabla sa susedstvima}
+\author{Branko Cvetković}
+
+\begin{document}
+
+\maketitle
+
+\section{O autoru i radu}
+
+Autor ovog naučnog rada je prof. dr Ahmad Biniaz\footnote{abiniaz@uwindsor.ca}, vanredni profesor na Vindzorskom univerzitetu\footnote{https://www.uwindsor.ca/} i gostujući profesor na Karlentskom univerzitetu\footnote{https://carleton.ca/} u Kanadi.
+
+Rad je objavljen u časopisu \textit{Journal of Computational Geometry}\footnote{https://jocg.org/index.php/jocg} iz aprila 2023. godine pod nazivom \textit{Approximating longest spanning tree with neighborhoods} u 14. tomu i prvom broju, i može se naći na stranicama 1--13.
+
+\section{Pregled rada}
+
+\subsection{Problem predstavljen u radu}
+
+Problem kojim se rad bavi se tiče razapinjućih stabala, jednim od osnovnih pojmova teorije grafova. Konkretan problem glasi: \textit{Kako pronaći najduže razapinjuće stablo čiji su čvorovi po jedna tačka iz svakog susedstva?} (ovaj problem poznat je i kao \textit{Max-ST-NB} problem).
+
+Ovaj problem je teži od problema pronalaženja najvećeg razapinjućeg stabla u klasičnom grafu jer obuhvata beskonačno mnogo tačaka iz svakog od konačno mnogo oblasti u ravni. Zbog neizvesnosti da li bi algoritam koji daje \textit{optimalno} rešenje ovakvog problema bio polinomijalne složenosti, pribeglo se optimizacijama i kreiranjima algoritama koji predstavljaju optimizacije optimalnog rešenja. Konačni rezultat ovog rada u tom pogledu je davanje \textit{$\frac{\sqrt{7} - 1}{3}$-aproksimacije} ($\approx$ 0,548) optimalnog algoritma.
+
+Još jedan „manji“ rezultat koji rad daje je dokaz da ne postoji algoritam koji daje aproksimaciju optimalnog rešenja bolju od 0,5 ukoliko \textit{uvek} koristi bihromatske dijametralne parove\footnote{Bihromatski dijametralni parovi su parovi tačaka iz dva susedstva koji imaju najveće moguće rastojanje i obojeni su različito.}, ali njega ovde nećemo diskutovati.
+
+\subsection{Slični radovi i značaj}
+
+Rad predstavlja poboljšanje algoritma koji su ranije dali Čen\footnote{\textit{Ke Chen}, kineski matematičar i informatičar.} i Dumitresku\footnote{\textit{Adrian Dumitrescu}, rumunski matematičar i informatičar.} koji daje 0,511-aproksimaciju ovog algoritma. Problemi slični ovome su \textit{Euklidski problem Štajnerovog drveta} koji se bavi optimalnim povezivanjem tačaka u Euklidovoj ravni i koji je NP-težak, \textit{Problem najmanjeg razapinjućeg stabla između susedstava u Euklidovoj ravni}, \textit{Problem putujućeg trgovca sa susedstvima} i drugi.
+
+Ovaj i slični problemi imaju svoju primenu u analizi heuristika za optimizaciju algoritama vezanih za kombinatorne probleme, algoritmima uređenog i homogenog klasterovanja, problemima maksimalne triangulacije, ali su bitni i kao nova saznanja u oblasti razapinjućih stabala kao jednog od najbitnijih pojmova teorije grafova.
+
+\section{Rezultati rada}
+
+Za početak biće potrebno uvesti sledeće pojmove:
+\begin{description}
+    \item[- zvezda sa centrom u $p$:] drvo kod koga su sve grane incidentne sa $p$ (v. Sliku 1(a));
+    \item[- dvozvezda sa centrima u $a$ i $b$:] drvo koje se sastoji iz dve zvezde sa centrima u $a$ i $b$ i kod koga su ti centri povezani (v. Sliku 1(b));
+    \item[- susedstvo $Q_i$:] skup mnogouglova u Euklidovoj ravni koji predstavljaju jednu celinu;
+    \item[- $X_i$:] skup koji sadrži sva temena mnogouglova iz susedstva $Q_i$;
+    \item[- maksimalna razapinjuća zvezda sa centrom u $p \in X_i$:] zvezda sa centrom u $p$ koja ima grane ka najdaljim (u smislu euklidskog rastojanja) tačkama u svakom preostalom susedstvu;
+    \item[- najmanji sadržeći krug:] najmanji mogući krug koji sadrži sve tačke iz $X_i$ za sve $i$.
+\end{description}
+
+\begin{figure}[h!]
+\centering
+\begin{subfigure}{0.45\textwidth}
+  \centering
+  \includegraphics[width=\linewidth,height=3cm,keepaspectratio]{zvezda.png}
+  \caption{Zvezda sa centrom u $v$.}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.45\textwidth}
+  \centering
+  \includegraphics[width=\linewidth,height=3cm,keepaspectratio]{dvozvezda.png}
+  \caption{Dvozvezda sa centrima u $v$ i $u$.}
+\end{subfigure}
+\caption{Grafički prikaz drveta od interesa.}
+\end{figure}
+
+Rad sada daje algoritam za pronalaženje najdužeg razapinjućeg stabla.
+
+Kao ulaz u algoritam dati skupovi $X_1, X_2, ..., X_n$ koji predstavljaju temena odgovarajućih susedstava, od kojih je svako susedstvo (tj. tačke unutar njega) obojeno \textit{različitom} bojom. Neka je $n$ broj tih susedstava, a $N$ ukupan broj temena iz svih susedstava, tj. $N = \sum_{k=1}^{n} |X_k|$.
+
+Algoritam se sastoji iz dva dela: prvo se pronalazi dvozvezda $D$ na sledeći način.
+
+\begin{itemize}
+    \item Pronađimo bihromatski dijametralni par tačaka $a$ i $b$. Neka su, bez umanjenja opštosti, $a \in X_1$ i $b \in X_2$.
+    \item Za sve $i \in \{3, 4, ..., n\}$ odredimo $p_i \in X_i$ i $q_i \in X_i$ td. je $p_i$ euklidski najudaljenija od $a$, a $q_i$ od $b$.
+    \item Ukoliko je udaljenost između $p_i$ i $a$ veća od udaljenosti između $q_i$ i $b$, u $D$ dodajmo granu $p_i$, a inače dodajmo granu $q_i$.
+\end{itemize}
+
+Ovako kreirana dvozvezda $D$ se pruža kroz sva susedstva (v. Sliku 2(a)). Drugi deo algoritma zahteva kreiranje nekoliko zvezdi na sledeći način.
+
+\begin{itemize}
+    \item Neka je $C$ najmanji sadržeći krug svih tačaka iz svih susedstava.
+    \item Ukoliko $C$ sadrži dve tačke (koje, usput rečeno, formiraju prečnik $C$), kreirajmo maksimalne razapinjuće zvezde $S_1$ i $S_2$ sa njima u centrima.
+    \item Inače, ukoliko $C$ sadrži tri ili više tačaka, odaberimo one tri koje formiraju takav trougao koji sadrži centar od $C$ (takve tri tačke moraju da postoje), i formirajmo maksimalne razapinjuće zvezde $S_1$, $S_2$ i $S_3$ sa centrima u tim tačkama.
+\end{itemize}
+
+Sada kada imamo formirane $D$, $S_1$, $S_2$ i (potencijalno) $S_3$ (v. Sliku 2(b)), vratimo kao izlaz iz algoritma onu strukturu koja ima najveću ukupnu dužinu grana.
+
+\begin{figure}[h!]
+\centering
+\begin{subfigure}{0.45\textwidth}
+  \centering
+  \includegraphics[width=\linewidth,height=5cm,keepaspectratio]{kreiranjeD.png}
+  \caption{Izgled dvozvezde $D$ nakon prvog koraka algoritma.}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.45\textwidth}
+  \centering
+  \includegraphics[width=\linewidth,height=5cm,keepaspectratio]{kreiranjeS.png}
+  \caption{Izgled zvezda $S_1$, $S_2$ i $S_3$ nakon drugog koraka algoritma.}
+\end{subfigure}
+\caption{Drveta koja se dobiju nakon sprovedenog algoritma.}
+\end{figure}
+
+Rad dalje nastavlja da diskutuje i analizira algoritam i, uz pomoć 4 dodatne leme, nalazi sledeće:
+
+\begin{itemize}
+    \item bihromatski dijametralni par može se naći u asimptotskom vremenu $O(Nlog(N)log(n))$;
+    \item najmanji sadržeći krug može se izračunati u asimptotskom vremenu $O(N)$;
+    \item nakon nalaženja bihromatskog dijametralnog para i najmanjeg sadržećeg kruga, ostatak algoritma radi u asimptotskom vremenu $O(N)$;
+    \item 0,548-aproksimacija najdužeg razapinjućeg stabla sa susedstvima može se izračunati u linearnom vremenu, nakon izračunavanja bihromatskog dijametralnog para (ovo je u radu predstavljeno kao \textit{Teorema 1}).
+\end{itemize}
+
+Rad se završava konstatacijom da je verovatno moguće izvesti i bolju aproksimaciju i daje savete za dalje unapređenje i analizu algoritma i problema.
+
+\vfill
+
+\textbf{NAPOMENA:} Ilustracije korišćene u ovom seminarskom radu generisane su putem \textit{online} alata \textit{Graph Editor} koji se može naći na veb-stranici \textit{https://csacademy.com/app/graph\_editor/}, ili su preuzete direktno iz originalnog rada.
+
+\end{document}
